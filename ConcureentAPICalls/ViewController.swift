@@ -20,7 +20,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for url in urls {
+        self.makeAPICalls()
+    }
+
+    private func makeAPICalls() {
+        urls.forEach { url in
             group.enter()
             let urlReq = URLRequest.init(url: url!)
             URLSession.shared.dataTask(with: urlReq) { (data, response, error) in
@@ -35,15 +39,15 @@ class ViewController: UIViewController {
                 }
                 self.group.leave()
             }.resume()
+
         }
-        
+
         // Configure a completion callback
         group.notify(queue: .main) {
             // All requests completed
             print("API calling Done")
         }
     }
-
 
 }
 
