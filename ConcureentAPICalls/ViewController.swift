@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     private func makeAPICalls() {
         urls.forEach { url in
             group.enter()
+            print("--------------Making request---------")
             let urlReq = URLRequest.init(url: url!)
             URLSession.shared.dataTask(with: urlReq) { (data, response, error) in
                 if let error = error {
@@ -39,13 +40,19 @@ class ViewController: UIViewController {
                 }
                 self.group.leave()
             }.resume()
-
         }
 
         // Configure a completion callback
-        group.notify(queue: .main) {
+        group.notify(queue: .main) { [weak self] in
             // All requests completed
             print("API calling Done")
+            let lbl = UILabel.init(frame: CGRect.init(x: 0, y: 200, width: 200, height: 30))
+            lbl.textAlignment = .center
+            lbl.center = self?.view.center ?? CGPoint.init(x: 0, y: 200)
+            lbl.text = "All calls completed"
+            lbl.backgroundColor = .red
+            lbl.textColor = .white
+            self?.view.addSubview(lbl)
         }
     }
 
